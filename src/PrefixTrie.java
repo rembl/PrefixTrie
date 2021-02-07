@@ -79,26 +79,21 @@ public class PrefixTrie {
                 } else return allWords;
             }
 
-            if (current.leaf) allWords.add(String.valueOf(word));
+            System.out.println(word); // check
 
-            while (!current.children.isEmpty()) {
-                for (Character letter : current.children.keySet()) {
-                    word.append(letter);
-                    if (current.children.get(letter).leaf) allWords.add(String.valueOf(word));
-                    childrenLoop(current.children.get(letter), word, allWords);
-                }
+            if (!current.children.isEmpty()) {
+                    childrenLoop(current, word, allWords);
             }
 
             return allWords;
         }
 
         public void childrenLoop(Node current, StringBuilder word, List<String> allWords) {
-            while (!current.children.isEmpty()) {
+            if (current.leaf) allWords.add(String.valueOf(word));
+            if (!current.children.isEmpty()) {
                 for (Character letter : current.children.keySet()) {
                     word.append(letter);
-                    if (current.children.get(letter).leaf) allWords.add(String.valueOf(word));
-                    if (!current.children.isEmpty()) childrenLoop(current.children.get(letter), word, allWords);
-                    current = current.children.get(letter);
+                    childrenLoop(current.children.get(letter), word, allWords);
                 }
             }
         }
@@ -106,15 +101,16 @@ public class PrefixTrie {
 
     public static void main(String[] args) {
         Trie tree = new Trie();
-        tree.put("peepeepoopoo");
-        tree.put("etop");
-        tree.put("ehop");
-        tree.put("eepee");
-        tree.put("apeep");
-        tree.delete("peepeepoopoo");
+        tree.put("apple");
+        tree.put("ant");
+        tree.put("angle");
+        tree.put("angel");
+        tree.put("orange");
+        tree.put("out");
+        tree.delete("ant");
         System.out.println(tree.root.children);
-        System.out.println(tree.search("peepeepoopoo"));
-        System.out.println(tree.search("apeep"));
-        System.out.println(tree.searchAll("e"));
+        System.out.println(tree.search("apple"));
+        System.out.println(tree.search("ant"));
+        System.out.println(tree.searchAll("ang"));
     }
 }
