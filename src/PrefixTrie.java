@@ -20,12 +20,10 @@ public class PrefixTrie {
 
         public void put(String input) {
             Node current = root;
-            StringBuilder word = new StringBuilder();
 
             if (input == null || input.length() == 0) return;
 
             for (char letter : input.toCharArray()) {
-                word.append(letter);
                 if (!current.children.containsKey(letter)) {
                     current.children.put(letter, new Node());
                 }
@@ -33,7 +31,7 @@ public class PrefixTrie {
             }
 
             current.putLeaf(true);
-            allWords.add(String.valueOf(word));
+            allWords.add(input);
         }
 
         public void delete(String input) {
