@@ -8,7 +8,6 @@ public class PrefixTrie {
     public static class Node {
         private final Map<Character, Node> children = new HashMap<>();
         private boolean leaf;
-        private StringBuilder value = new StringBuilder();
 
         public void putLeaf(boolean leaf) {
             this.leaf = leaf;
@@ -34,7 +33,6 @@ public class PrefixTrie {
             }
 
             current.putLeaf(true);
-            current.value = word;
             allWords.add(String.valueOf(word));
         }
 
@@ -58,7 +56,6 @@ public class PrefixTrie {
             if (!current.children.isEmpty()) current.putLeaf(false);
             else {
                 lastNode.children.remove(lastLetter);
-                lastNode.value = null;
             }
             allWords.remove(input);
         }
