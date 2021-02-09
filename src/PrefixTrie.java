@@ -60,11 +60,11 @@ public class PrefixTrie {
             allWords.remove(input);
         }
 
-        public boolean search(String input) {
+        public boolean searchWord(String input) {
             return allWords.contains(input);
         }
 
-        public List<String> searchAll(String input) {
+        public List<String> searchWordsWithPrefix(String input) {
             List<String> prefixWords = new ArrayList<>();
             for (String word : allWords) {
                 if (word.startsWith(input)) prefixWords.add(word);
@@ -84,8 +84,8 @@ public class PrefixTrie {
         tree.put("out");
         tree.delete("anger");
         System.out.println(tree.root.children.keySet());
-        System.out.println(tree.search("apple"));
-        System.out.println(tree.search("ant"));
-        System.out.println(tree.searchAll("ang"));
+        System.out.println(tree.searchWord("apple"));
+        System.out.println(tree.searchWord("ant"));
+        System.out.println(tree.searchWordsWithPrefix("ang"));
     }
 }
