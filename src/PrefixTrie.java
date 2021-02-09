@@ -6,8 +6,9 @@ import java.util.Map;
 public class PrefixTrie {
 
     public static class Node {
-        private Map<Character, Node> children = new HashMap<>();
+        private final Map<Character, Node> children = new HashMap<>();
         private boolean leaf;
+        private StringBuilder value = new StringBuilder();
 
         public void putLeaf(boolean leaf) {
             this.leaf = leaf;
@@ -15,14 +16,17 @@ public class PrefixTrie {
     }
 
     public static class Trie {
-        private Node root = new Node();
+        private final Node root = new Node();
+        private final List<String> allWords = new ArrayList<>();
 
         public void put(String input) {
             Node current = root;
+            StringBuilder word = new StringBuilder();
 
             if (input == null || input.length() == 0) return;
 
             for (char letter : input.toCharArray()) {
+                word.append(letter);
                 if (!current.children.containsKey(letter)) {
                     current.children.put(letter, new Node());
                 }
@@ -30,6 +34,8 @@ public class PrefixTrie {
             }
 
             current.putLeaf(true);
+            current.value = word;
+            allWords.add(String.valueOf(word));
         }
 
         public void delete(String input) {
@@ -50,65 +56,37 @@ public class PrefixTrie {
 
             if (!current.leaf) return;
             if (!current.children.isEmpty()) current.putLeaf(false);
-            else lastNode.children.remove(lastLetter);
+            else {
+                lastNode.children.remove(lastLetter);
+                lastNode.value = null;
+            }
+            allWords.remove(input);
         }
 
         public boolean search(String input) {
-            Node current = root;
-
-            if (input == null || input.length() == 0) return false;
-
-            for (char letter : input.toCharArray()) {
-                if (!current.children.containsKey(letter)) return false;
-                current = current.children.get(letter);
-            }
-            return current.leaf;
+            return allWords.contains(input);
         }
 
         public List<String> searchAll(String input) {
-            List<String> allWords = new ArrayList<>();
-            Node current = root;
-            StringBuilder word = new StringBuilder();
-
-            if (input == null || input.length() == 0) return allWords;
-
-            for (char letter : input.toCharArray()) {
-                if (current.children.containsKey(letter)) {
-                    word.append(letter);
-                    current = current.children.get(letter);
-                } else return allWords;
+            List<String> prefixWords = new ArrayList<>();
+            for (String word : allWords) {
+                if (word.startsWith(input)) prefixWords.add(word);
             }
-
-            System.out.println(word); // check
-
-            if (!current.children.isEmpty()) {
-                    childrenLoop(current, word, allWords);
-            }
-
-            return allWords;
-        }
-
-        public void childrenLoop(Node current, StringBuilder word, List<String> allWords) {
-            if (current.leaf) allWords.add(String.valueOf(word));
-            if (!current.children.isEmpty()) {
-                for (Character letter : current.children.keySet()) {
-                    word.append(letter);
-                    childrenLoop(current.children.get(letter), word, allWords);
-                }
-            }
+            return prefixWords;
         }
     }
 
     public static void main(String[] args) {
         Trie tree = new Trie();
         tree.put("apple");
-        tree.put("ant");
+        tree.put("anger");
+        tree.put("angers");
         tree.put("angle");
         tree.put("angel");
         tree.put("orange");
         tree.put("out");
-        tree.delete("ant");
-        System.out.println(tree.root.children);
+        tree.delete("anger");
+        System.out.println(tree.root.children.keySet());
         System.out.println(tree.search("apple"));
         System.out.println(tree.search("ant"));
         System.out.println(tree.searchAll("ang"));
