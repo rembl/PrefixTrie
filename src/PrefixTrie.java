@@ -5,20 +5,17 @@ import java.util.Map;
 
 public class PrefixTrie {
 
-    public static class Node {
-        private final Map<Character, Node> children = new HashMap<>();
-        private boolean leaf;
-        private String value;
-
-        public void putLeaf(boolean leaf) {
-            this.leaf = leaf;
-        }
-        public void putValue(String value) {
-            this.value = value;
-        }
-    }
-
     public static class Trie {
+
+        public static class Node {
+            private final Map<Character, Node> children = new HashMap<>();
+            private boolean leaf;
+
+            public void setLeaf(boolean leaf) {
+                this.leaf = leaf;
+            }
+        }
+
         private final Node root = new Node();
 
         public void put(String input) {
@@ -33,8 +30,7 @@ public class PrefixTrie {
                 current = current.children.get(letter);
             }
 
-            current.putLeaf(true);
-            current.putValue(input);
+            current.setLeaf(true);
         }
 
         public void delete(String input) {
@@ -55,8 +51,7 @@ public class PrefixTrie {
 
             if (!current.leaf) return;
             if (!current.children.isEmpty()) {
-                current.putLeaf(false);
-                current.value = null;
+                current.setLeaf(false);
             } else {
                 lastNode.children.remove(lastLetter);
             }
@@ -75,29 +70,35 @@ public class PrefixTrie {
         }
 
         public List<String> searchWordsWithPrefix(String input) {
-            List<String> allWordsWithPrefix = new ArrayList<>();
+            List<String> allWords = new ArrayList<>();
             Node current = root;
+            StringBuilder word = new StringBuilder();
 
-            if (input == null || input.length() == 0) return allWordsWithPrefix;
+            if (input == null || input.length() == 0) return allWords;
 
             for (char letter : input.toCharArray()) {
                 if (current.children.containsKey(letter)) {
+                    word.append(letter);
                     current = current.children.get(letter);
-                } else return allWordsWithPrefix;
+                } else return allWords;
             }
 
             if (!current.children.isEmpty()) {
-                childrenLoop(current, allWordsWithPrefix);
-            } else if (current.leaf) allWordsWithPrefix.add(current.value);
+                childrenLoop(current, word, allWords);
+            } else if (current.leaf) allWords.add(String.valueOf(word));
 
-            return allWordsWithPrefix;
+            return allWords;
         }
 
-        public void childrenLoop(Node current, List<String> allWordsWithPrefix) {
-            if (current.leaf) allWordsWithPrefix.add(current.value);
+        public void childrenLoop(Node current, StringBuilder word, List<String> allWords) {
             if (!current.children.isEmpty()) {
                 for (Character letter : current.children.keySet()) {
-                    childrenLoop(current.children.get(letter), allWordsWithPrefix);
+                    word.append(letter);
+                    if (current.children.get(letter).leaf) {
+                        allWords.add(String.valueOf(word));
+                    }
+                    childrenLoop(current.children.get(letter), word, allWords);
+                    word.deleteCharAt(word.length() - 1);
                 }
             }
         }
