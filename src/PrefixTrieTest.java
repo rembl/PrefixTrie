@@ -1,12 +1,12 @@
+import org.junit.jupiter.api.Test;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class PrefixTrieTest {
 
     PrefixTrie tree = new PrefixTrie();
 
-    @org.junit.jupiter.api.Test
+    @Test
     void searchWord() {
         tree.put("apple");
         tree.put("pear");
@@ -21,7 +21,7 @@ class PrefixTrieTest {
         assertFalse(tree.searchWord("tangerine"));
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void searchWordsWithPrefix() {
         tree.put("apple");
         tree.put("pear");
