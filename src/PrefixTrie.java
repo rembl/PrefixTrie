@@ -83,23 +83,19 @@ public class PrefixTrie {
 
         if (current.leaf) allWords.add(String.valueOf(word));
 
-        if (!current.children.isEmpty()) {
-            childrenLoop(current, word, allWords);
-        }
+        childrenLoop(current, word, allWords);
 
         return allWords;
     }
 
     public void childrenLoop(Node current, StringBuilder word, List<String> allWords) {
-        if (!current.children.isEmpty()) {
-            for (Character letter : current.children.keySet()) {
-                word.append(letter);
-                if (current.children.get(letter).leaf) {
-                    allWords.add(String.valueOf(word));
-                }
-                childrenLoop(current.children.get(letter), word, allWords);
-                word.deleteCharAt(word.length() - 1);
+        for (Character letter : current.children.keySet()) {
+            word.append(letter);
+            if (current.children.get(letter).leaf) {
+                allWords.add(String.valueOf(word));
             }
+            childrenLoop(current.children.get(letter), word, allWords);
+            word.deleteCharAt(word.length() - 1);
         }
     }
 }

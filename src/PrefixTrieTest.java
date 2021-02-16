@@ -4,10 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PrefixTrieTest {
 
-    PrefixTrie tree = new PrefixTrie();
-
     @Test
     void searchWord() {
+        PrefixTrie tree = new PrefixTrie();
         tree.put("apple");
         tree.put("pear");
         tree.put("orange");
@@ -23,6 +22,7 @@ class PrefixTrieTest {
 
     @Test
     void searchWordsWithPrefix() {
+        PrefixTrie tree = new PrefixTrie();
         tree.put("apple");
         tree.put("pear");
         tree.put("pea");
